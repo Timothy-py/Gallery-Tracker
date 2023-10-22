@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const authSchema = new mongoose.Schema({
   email: {
@@ -10,27 +10,23 @@ const authSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
-  },
-  userID: {
-    type: mongoose.SchemaTypes.ObjectId,
-    required: false,
-    ref: 'user'
+    required: true,
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 // Encrypt password using bcrypt
-authSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    next();
+authSchema.pre("save", async function (next) {
+  const user = this;
+  if (user.isModified("password")) {
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    user.password = await bcrypt.hash(user.password, salt);
   }
-
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
 // Match user entered password to hashed password in database
@@ -38,4 +34,6 @@ authSchema.methods.matchPassword = async function (enteredPassword) {
   return bcrypt.compare(enteredPassword, this.password);
 };
 
-module.exports = mongoose.model('auth', authSchema);
+const Auth = mongoose.model("auth", authSchema);
+
+module.exports = Auth;
