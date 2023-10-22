@@ -15,8 +15,21 @@ const signupSchema = Joi.object({
     ),
 });
 
+const signinSchema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string()
+      .required()
+      .min(8)
+      .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])"))
+      .message(
+        "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character (!@#$%^&*)"
+      ),
+  });
+
 const validateSignup = validator(signupSchema);
+const validateSignin = validator(signinSchema);
 
 module.exports = {
   validateSignup,
+  validateSignin
 };
