@@ -1,4 +1,5 @@
 const { default: mongoose } = require("mongoose");
+const logger = require("../../logger/logger");
 
 const connectDB = async () => {
   var DATABASE_URI = "";
@@ -14,7 +15,7 @@ const connectDB = async () => {
   await mongoose.connect(DATABASE_URI);
 
   const connection = mongoose.connection;
-  console.log("Connection to MongoDB Atlas established successfully");
+  logger.info("Connection to MongoDB established successfully")
 };
 
 module.exports = connectDB;
