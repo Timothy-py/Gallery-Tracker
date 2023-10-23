@@ -12,6 +12,16 @@ const authSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  _userID: {
+    type: mongoose.SchemaTypes.ObjectId,
+    required: false,
+    ref: 'user'
+  },
+  _companyID: {
+    type: mongoose.SchemaTypes.ObjectId,
+    required: false,
+    ref: 'company'
+  },
   createdAt: {
     type: Date,
     default: Date.now,

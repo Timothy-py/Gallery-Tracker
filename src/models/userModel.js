@@ -16,11 +16,6 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-  _company: {
-    type: mongoose.SchemaTypes.ObjectId,
-    required: false,
-    ref: "company",
-  },
   createdAt: {
     type: Date,
     default: Date.now,
