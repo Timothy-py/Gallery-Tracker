@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
-// Authentication guard for routes
-const authGuard = async (req, res, next) => {
+// User authentication guard for routes
+const userGuard = async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -40,4 +40,4 @@ const authGuard = async (req, res, next) => {
   }
 };
 
-module.exports = authGuard;
+module.exports = userGuard;
