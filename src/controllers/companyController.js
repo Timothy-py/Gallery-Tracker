@@ -1,7 +1,8 @@
 const logger = require("../../logger/logger");
 const Auth = require("../models/authModel");
 const Company = require("../models/companyModel");
-const { validateCreateCompany } = require("../utils/validators");
+const sendTokenResponse = require("../utils/tokenResponse");
+const { validateCreateCompany, validateSignin } = require("../utils/validators");
 
 /**
  * @author Timothy <>
@@ -51,12 +52,10 @@ exports.registerCompany = async (req, res) => {
     return res.status(201).json({ status: "success", data: newCompany });
   } catch (error) {
     if (error.code === 11000)
-      return res
-        .status(409)
-        .json({
-          status: "fail",
-          data: { message: "A company account with that name already exist" },
-        });
+      return res.status(409).json({
+        status: "fail",
+        data: { message: "A company account with that name already exist" },
+      });
     logger.error(
       `Company resource: Unable to create company - ${error.message}`
     );
@@ -66,4 +65,42 @@ exports.registerCompany = async (req, res) => {
       error: error,
     });
   }
+};
+
+/**
+ * @author Timothy <>
+ * @description Company login`
+ * @route `/api/v1/companies/signin`
+ * @access Public
+ * @type POST
+ */
+exports.signinCompany = async (req, res) => {
+  // Validate the request body
+  const { error, value } = validateSignin(req.body);
+  if (error) return res.status(400).send(error.details);
+
+  const { email, password } = value;
+
+  // Find company
+  const authProfile = await Auth.findOne({
+    email: email,
+    _companyID: { $exists: true },
+  });
+
+  if (!authProfile)
+    return res
+      .status(404)
+      .json({ status: "fail", data: { message: "Account does not exist" } });
+
+  // check for password matches
+  const isMatch = await authProfile.matchPassword(password);
+  if (!isMatch)
+    return res
+      .status(401)
+      .json({ status: "fail", data: { message: "Incorrect password" } });
+
+  // Query company data
+  const company = await Company.findOne({ _authId: authProfile._id });
+
+  sendTokenResponse(company, res);
 };

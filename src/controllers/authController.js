@@ -42,8 +42,8 @@ exports.signup = async (req, res) => {
   await userProfile.save();
 
   await Auth.findOneAndUpdate(
-    {_id: authProfile._id},
-    {_userID: userProfile._id},
+    { _id: authProfile._id },
+    { _userID: userProfile._id }
   );
 
   return res.status(201).json({ status: "success", data: userProfile });
@@ -64,7 +64,11 @@ exports.signin = async (req, res) => {
   const { email, password } = value;
 
   // FInd user
-  const authProfile = await Auth.findOne({ email });
+  const authProfile = await Auth.findOne({
+    email: email,
+    _userID: { $exists: true },
+  });
+  
   if (!authProfile)
     return res
       .status(404)

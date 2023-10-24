@@ -1,6 +1,6 @@
-const sendTokenResponse = (user, res) => {
+const sendTokenResponse = (model, res) => {
   // Create token
-  const token = user.getSignedJwtToken();
+  const token = model.getSignedJwtToken();
 
   const options = {
     expires: new Date(
@@ -14,7 +14,7 @@ const sendTokenResponse = (user, res) => {
   return res
     .status(200)
     .cookie("token", token, options)
-    .json({ status: "success", data: { token, user } });
+    .json({ status: "success", data: { token, model } });
 };
 
 module.exports = sendTokenResponse;
