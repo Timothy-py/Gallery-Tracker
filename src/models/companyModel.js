@@ -1,6 +1,14 @@
 const mongoose = require("mongoose");
 
 const companySchema = new mongoose.Schema({
+  _authId: {
+    type: mongoose.SchemaTypes.ObjectId,
+    required: [
+      true,
+      "a Company can't be created without an authentication handler",
+    ],
+    ref: "auth",
+  },
   name: {
     type: String,
     required: true,

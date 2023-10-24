@@ -1,6 +1,6 @@
 const companyRouter = require('express').Router()
-const { createCompany } = require('../controllers/companyController')
+const { registerCompany } = require('../controllers/companyController')
 
-companyRouter.post('/', createCompany)
+companyRouter.post('/register', registerCompany)
 
 module.exports = companyRouter;

@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 const sendTokenResponse = require("../utils/tokenResponse");
 const { validateSignup, validateSignin } = require("../utils/validators");
 const bcrypt = require("bcryptjs");
+
 /**
  * @author Timothy <>
  * @description User signup`
@@ -18,7 +19,10 @@ exports.signup = async (req, res) => {
   const { email, username, password } = value;
 
   // check if user exist
-  const checkAccount = await Auth.findOne({ email });
+  const checkAccount = await Auth.findOne({
+    email: email,
+    _userID: { $exists: true },
+  });
 
   if (checkAccount)
     return res.status(409).json({
@@ -36,6 +40,11 @@ exports.signup = async (req, res) => {
     _authId: authProfile._id,
   });
   await userProfile.save();
+
+  await Auth.findOneAndUpdate(
+    {_id: authProfile._id},
+    {_userID: userProfile._id},
+  );
 
   return res.status(201).json({ status: "success", data: userProfile });
 };
