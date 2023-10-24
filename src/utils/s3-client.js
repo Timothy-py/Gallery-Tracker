@@ -13,12 +13,12 @@ const s3 = new S3Client({
     region: BUCKET_REGION
 })
 
-const upload = async (params) => {
+const s3_upload = async (params) => {
     const command = new PutObjectCommand(params)
     await s3.send(command)
 }
 
 module.exports = {
     s3,
-    upload
+    s3_upload
 };

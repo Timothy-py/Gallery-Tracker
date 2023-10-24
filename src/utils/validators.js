@@ -36,15 +36,22 @@ const createCompanySchema = Joi.object({
       "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character (!@#$%^&*)"
     ),
   name: Joi.string().required(),
-  one_line_pitch: Joi.string()
+  one_line_pitch: Joi.string(),
+});
+
+const uploadImageSchema = Joi.object({
+  title: Joi.string().required(),
+  description: Joi.string(),
 });
 
 const validateSignup = validator(signupSchema);
 const validateSignin = validator(signinSchema);
 const validateCreateCompany = validator(createCompanySchema);
+const validateImageUpload = validator(uploadImageSchema);
 
 module.exports = {
   validateSignup,
   validateSignin,
   validateCreateCompany,
+  validateImageUpload,
 };
