@@ -44,14 +44,21 @@ const uploadImageSchema = Joi.object({
   description: Joi.string(),
 });
 
+const viewImageSchema = Joi.object({
+  imageId: Joi.string().required(),
+  userId: Joi.string(),
+});
+
 const validateSignup = validator(signupSchema);
 const validateSignin = validator(signinSchema);
 const validateCreateCompany = validator(createCompanySchema);
 const validateImageUpload = validator(uploadImageSchema);
+const validateViewImage = validator(viewImageSchema);
 
 module.exports = {
   validateSignup,
   validateSignin,
   validateCreateCompany,
   validateImageUpload,
+  validateViewImage,
 };
