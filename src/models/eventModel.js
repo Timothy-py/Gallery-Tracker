@@ -3,12 +3,13 @@ const mongoose = require("mongoose");
 const eventSchema = new mongoose.Schema({
   imageId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Image",
+    ref: "image",
     required: true,
   },
 
   userId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
     required: true,
   },
 

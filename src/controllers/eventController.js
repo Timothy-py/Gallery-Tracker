@@ -15,7 +15,9 @@ exports.viewImage = async (req, res) => {
     const { error, value } = validateEvent(req.body);
     if (error) return res.status(400).send(error.details);
 
-    const { imageId, userId } = value;
+    let { imageId, userId } = value;
+
+    if (!userId) userId = req.user._id;
 
     const viewEvent = new Event({
       imageId,
@@ -52,7 +54,9 @@ exports.clickImage = async (req, res) => {
     const { error, value } = validateEvent(req.body);
     if (error) return res.status(400).send(error.details);
 
-    const { imageId, userId } = value;
+    let { imageId, userId } = value;
+
+    if (!userId) userId = req.user._id;
 
     const clickEvent = new Event({
       imageId,
