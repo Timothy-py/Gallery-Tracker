@@ -10,8 +10,7 @@ const companyGuard = async (req, res, next) => {
   ) {
     // set token from header
     token = req.headers.authorization.split(" ")[1];
-  } else if (req.headers.cookie &&
-    req.headers.cookie.startsWith("token")) {
+  } else if (req.headers.cookie && req.headers.cookie.startsWith("token")) {
     // set token from cookie
     token = req.headers.cookie.split("token=")[1];
   }
