@@ -1,11 +1,12 @@
 const logger = require("../../logger/logger");
 const Event = require("../models/eventModel");
+const imgWeightCalc = require("../services/imgWeightCalc");
 const { validateEvent } = require("../utils/validators");
 
 /**
  * @author Timothy <>
  * @description View image`
- * @route `/api/v1//events/view`
+ * @route `/api/v1/events/view`
  * @access Private to User
  * @type POST
  */
@@ -19,7 +20,7 @@ exports.viewImage = async (req, res) => {
 
     if (!userId) userId = req.user._id;
 
-    // check it user already viewed the image
+    // check if user already viewed the image
     const eventExist = await Event.findOne({
       imageId,
       userId,
@@ -33,6 +34,9 @@ exports.viewImage = async (req, res) => {
       eventType: "view",
     });
     await viewEvent.save();
+
+    // Recalculate the image weight
+    await imgWeightCalc(imageId, "view");
 
     logger.info(`Tracked view event - ${viewEvent}`);
     return res.status(201).json({
@@ -68,11 +72,11 @@ exports.clickImage = async (req, res) => {
 
     // check it user already clicked the image
     const eventExist = await Event.findOne({
-        imageId,
-        userId,
-        eventType: "click",
-      });
-      if (eventExist) return res.status(200).send(true);
+      imageId,
+      userId,
+      eventType: "click",
+    });
+    if (eventExist) return res.status(200).send(true);
 
     const clickEvent = new Event({
       imageId,
@@ -80,6 +84,9 @@ exports.clickImage = async (req, res) => {
       eventType: "click",
     });
     await clickEvent.save();
+
+    // Recalculate the image weight
+    await imgWeightCalc(imageId, "click");
 
     logger.info(`Tracked click event - ${clickEvent}`);
     return res.status(201).json({

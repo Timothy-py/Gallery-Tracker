@@ -15,6 +15,10 @@ const imageSchema = new mongoose.Schema({
   metadata: {
     title: String,
     description: String,
+    weight: {
+      type: Number,
+      default: 0,
+    },
   },
 
   createdAt: {
