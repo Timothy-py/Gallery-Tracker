@@ -19,6 +19,14 @@ exports.viewImage = async (req, res) => {
 
     if (!userId) userId = req.user._id;
 
+    // check it user already viewed the image
+    const eventExist = await Event.findOne({
+      imageId,
+      userId,
+      eventType: "view",
+    });
+    if (eventExist) return res.status(200).send(true);
+
     const viewEvent = new Event({
       imageId,
       userId,
@@ -57,6 +65,14 @@ exports.clickImage = async (req, res) => {
     let { imageId, userId } = value;
 
     if (!userId) userId = req.user._id;
+
+    // check it user already clicked the image
+    const eventExist = await Event.findOne({
+        imageId,
+        userId,
+        eventType: "click",
+      });
+      if (eventExist) return res.status(200).send(true);
 
     const clickEvent = new Event({
       imageId,

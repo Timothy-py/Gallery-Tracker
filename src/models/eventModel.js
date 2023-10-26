@@ -26,7 +26,7 @@ const eventSchema = new mongoose.Schema({
 });
 
 // Create indexes on imageId and eventType to support faster querying
-eventSchema.index({ imageId: 1, eventType: 1 });
+eventSchema.index({ imageId: 1, eventType: 1, userId: 1 });
 
 const Event = mongoose.model("event", eventSchema);
 
