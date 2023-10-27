@@ -3,8 +3,8 @@ const Company = require("../models/companyModel");
 const Image = require("../models/imageModel");
 const redis = require("./connectRedis");
 
-logger.info("Executing image sort function>>>>>>>>>>>>>>>");
 const imgSort = async () => {
+  logger.info("Executing image sort function>>>>>>>>>>>>>>>");
   try {
     // get all the companies ID
     const companies = await Company.find({}, "_id");
@@ -12,7 +12,6 @@ const imgSort = async () => {
     // sort the images associated with the company
     for (let i = 0; i < companies.length; i++) {
       const company = companies[i];
-      console.log(company)
 
       const sorted = await Image.find({ _companyId: company._id }).sort({
         "metadata.weight": -1,
