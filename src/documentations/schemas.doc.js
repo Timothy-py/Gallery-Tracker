@@ -1,3 +1,26 @@
+// *************SECURITY SCHEMA***********************************
+/**
+ * @openapi
+ * components:
+ *  securitySchemes:
+ *      companyAuth:
+ *          type: apiKey
+ *          in: header
+ *          name: authorization
+ *          description: API key for Authorization
+ */
+
+/**
+ * @openapi
+ * components:
+ *  securitySchemes:
+ *      userAuth:
+ *          type: apiKey
+ *          in: header
+ *          name: authorization
+ *          description: API key for Authorization
+ */
+
 // *************USER SCHEMA***********************************
 /**
  * @openapi
@@ -45,3 +68,33 @@
  *              type: string
  *              example: 2023-08-17T06:22:27.136+00:00
  *  */
+
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Image:
+ *       type: object
+ *       properties:
+ *         _companyId:
+ *           type: string
+ *           description: ID of the company that uploaded the image.
+ *         imageUrl:
+ *           type: string
+ *           description: URL of the uploaded image.
+ *         metadata:
+ *           type: object
+ *           properties:
+ *             title:
+ *               type: string
+ *               description: Title of the image.
+ *             description:
+ *               type: string
+ *               description: Description of the image.
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Timestamp of when the image was created.
+ */
+
