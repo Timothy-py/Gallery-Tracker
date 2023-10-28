@@ -69,7 +69,7 @@
  *              example: 2023-08-17T06:22:27.136+00:00
  *  */
 
-
+// *************IMAGE SCHEMA***********************************
 /**
  * @openapi
  * components:
@@ -98,3 +98,26 @@
  *           description: Timestamp of when the image was created.
  */
 
+// *************EVENT SCHEMA***********************************
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Event:
+ *       type: object
+ *       properties:
+ *         imageId:
+ *           type: string
+ *           description: ID of the viewed image.
+ *         userId:
+ *           type: string
+ *           description: ID of the user who viewed the image.
+ *         eventType:
+ *           type: string
+ *           description: Type of event
+ *           enum: ["view", "click"]
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Timestamp of when the event was created.
+ */
