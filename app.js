@@ -3,8 +3,9 @@ const express = require("express");
 const cron = require("node-cron");
 
 const connectDB = require("./src/services/connectDB");
-const imgSort = require("./src/services/imgSort");
 const logger = require("./logger/logger");
+const swaggerDocs = require("./src/documentations/swagger");
+const { imgSort } = require("./src/services/imgSort");
 
 const app = express();
 const APP_PORT = process.env.APP_PORT;
@@ -14,7 +15,7 @@ const authRoutes = require("./src/routes/authRoute");
 const companyRoutes = require("./src/routes/companyRoute");
 const imageRoutes = require("./src/routes/imageRoute");
 const eventRoutes = require("./src/routes/eventRoute");
-const swaggerDocs = require("./src/documentations/swagger");
+const eventListeners = require("./src/events/events.service");
 
 // MIDDLEWARES
 app.use(express.json());
@@ -28,8 +29,11 @@ app.use("/api/v1/events", eventRoutes);
 // CONNECT DATABASE
 connectDB();
 
+// Load Event Listeners
+eventListeners()
+
 // LOAD CRON JOB
-// cron.schedule("*/1 * * * *", imgSort);
+cron.schedule("*/5 * * * *", imgSort);
 
 // API DOCUMENTATION
 swaggerDocs(app, APP_PORT);

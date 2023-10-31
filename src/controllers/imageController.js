@@ -1,7 +1,9 @@
 const logger = require("../../logger/logger");
+const eventEmitter = require("../events/events");
 const Company = require("../models/companyModel");
 const Image = require("../models/imageModel");
 const redis = require("../services/connectRedis");
+const { companyImgSort } = require("../services/imgSort");
 const { resize } = require("../utils/img-processor");
 const randomImageNameGenerator = require("../utils/nameGenerator");
 const { s3_upload } = require("../utils/s3-client");
@@ -50,6 +52,10 @@ exports.upload = async (req, res) => {
     await newImage.save();
 
     logger.info(`Image uploaded and saved successfully - ${imageName}`);
+
+    // emit event
+    eventEmitter.emit("imageUploaded", {companyID: req.company._id});
+
     return res.status(201).json({ status: "success", data: newImage });
   } catch (error) {
     logger.error(`Unable to upload image - ${error}`);
