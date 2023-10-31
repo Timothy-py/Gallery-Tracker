@@ -59,7 +59,7 @@ Checkout the API @ the url below.
 APP_PORT is default to 3000 or change it to whatever you set in the .env file.
 
 ```
-http://localhost:3000/api/doc
+http://localhost:3000/api-docs
 ```
 
 ## Stay in touch
