@@ -6,7 +6,7 @@ const redis = require("../services/connectRedis");
 const { companyImgSort } = require("../services/imgSort");
 const { resize } = require("../utils/img-processor");
 const randomImageNameGenerator = require("../utils/nameGenerator");
-const { s3_upload } = require("../utils/s3-client");
+const { s3_upload, s3_signedUrl } = require("../utils/s3-client");
 const { validateImageUpload } = require("../utils/validators");
 
 /**
@@ -30,20 +30,27 @@ exports.upload = async (req, res) => {
     // resize image
     const resizedImg = await resize(img.buffer);
 
-    const params = {
+    const uploadParams = {
       Bucket: BUCKET_NAME,
       Key: imageName,
       Body: resizedImg,
       ContentType: img.mimetype,
     };
 
-    await s3_upload(params);
-    logger.info(`${img.originalname} uploaded to s3 successfully`);
+    const getParams = {
+      Bucket: BUCKET_NAME,
+      Key: imageName,
+    };
+
+    const [, url] = await Promise.all([
+      s3_upload(uploadParams),
+      s3_signedUrl(getParams),
+    ]);
 
     // save image data to DB
     const newImage = new Image({
       _companyId: req.company._id,
-      imageUrl: imageName,
+      imageUrl: url,
       metadata: {
         title: title,
         description: description,
@@ -54,7 +61,7 @@ exports.upload = async (req, res) => {
     logger.info(`Image uploaded and saved successfully - ${imageName}`);
 
     // emit event
-    eventEmitter.emit("imageUploaded", {companyID: req.company._id});
+    eventEmitter.emit("imageUploaded", { companyID: req.company._id });
 
     return res.status(201).json({ status: "success", data: newImage });
   } catch (error) {

@@ -25,7 +25,7 @@ const s3_upload = async (params) => {
 
 const s3_signedUrl = async (params) => {
   const command = new GetObjectCommand(params);
-  const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+  const url = await getSignedUrl(s3, command);
   return url;
 };
 
