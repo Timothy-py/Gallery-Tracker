@@ -2,7 +2,7 @@
 
 ## Description
 
-A product gallery tracking and optimizer API that shows how other buyers are using/consuming the product.
+A product gallery tracking and optimizer API that shows how other buyers are using/consuming the product. Go to PROJECT_DESCRIPTION.md file for the full project descripton.
 
 ## APPS
 
